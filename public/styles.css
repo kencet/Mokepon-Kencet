@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,900&family=Rubik+Storm&display=swap');
+*{
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+    border-radius: 20px;
+}
+body{
+    color: white;
+    background-color: #391fb1;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+.tittle{
+    font-size: 64px;
+    margin: 7px;
+}
+.subtitle{
+    font-size: 52px
+}
+.boxes{
+    display: flex;
+    align-items: center;
+}
+.boxes img{
+    height: 200px;
+}
+.tarjetas,.a_button{
+    background-color: #59C1BD;
+    color: white;
+    border: 0px;
+    padding: 16px;
+    margin: 10px;
+    font-size: 24px;
+}
+.tarjetas{
+    height: 320px;
+    width: 212px;    
+    font-size: 32px;  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+input{
+    display: none;
+}
+input:checked + label{
+    background-color: #0A2647;
+
+}
+#mascota,#ataque,#mensajes,#final_result,#reiniciar,#watchMap{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.map{
+    border: 3px solid black;
+    padding: 8px;
+    margin: 4px;
+    font-size: 16px;
+}
+#reinicio,#b_mascota{
+    background-color: transparent;
+    padding: 8px;
+    border: 3px solid;
+    margin: 20px;
+    font-size: 32px;
+    color: white;
+    cursor: pointer;
+}
+#final_result{
+    padding: 8px;
+    margin: 20px;
+    font-size: 32px;
+    color: white;
+    background-color: #59CE8F;
+}
+#attack,#enemy_attack{
+    display: grid;
+    justify-items: center;
+    background-color: #59C1BD;
+    color: white;
+    margin: 10px;
+    font-size: 28px;
+    width: 180px;
+    justify-content: center;
+}
+p{
+    margin: 10px;
+}
+#fight{
+    display: grid;
+    grid-template-columns: 200px 200px;
+    justify-items: center;
+}
+@media (max-width: 1350px){
+    .boxes,.xd{
+        display: flex;
+        flex-direction: column;
+    }
+    #final_result{
+        padding: 12px;
+        font-size: 24px;
+    }
+}
+@media (max-width: 415px){
+    .tittle{
+        font-size: 40px;
+        margin: 7px;
+    }
+    .subtitle{
+        font-size: 32px
+    }
+    #media{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
