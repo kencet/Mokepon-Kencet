@@ -23,14 +23,12 @@ const map = document.getElementById("map")
 let lienzo = map.getContext("2d")
 
 let mokepones = []
-let mokeponesEnemies = []
 let botones = []
 let opcionDeMokepones
 let opciondeataques
 let a_player = []
-let a_enemy = []
+let a_enemy
 let ataquej
-let attacks = []
 
 let i_hipodoge 
 let i_capipepo 
@@ -41,11 +39,9 @@ let i_langostelvis
 
 let p_pet
 let playerId = null
-let enemyId = null
 let n_ataque
 let e_mokepon
 let ataques
-let intervalo
 
 let begin = 0
 let ph_player = 0
@@ -68,8 +64,7 @@ map.height = mapHeight
 map.width = mapWidth
 
 class Mokepon {
-    constructor(name, picture, hp, mapPic, id = null) {
-        this.id = id
+    constructor(name, picture, hp, mapPic) {
         this.name = name
         this.picture = picture
         this.hp = hp
@@ -100,34 +95,55 @@ let langostelvis = new Mokepon("Langostelvis", "./assets/Langostelvis.png",5, ".
 let pydos = new Mokepon("Pydos", "./assets/Pydos.png",5, "./assets/pydosHead.png")
 let tucapalma = new Mokepon("Tucapalma", "./assets/Tucapalma.png",5, "./assets/tucapalmaHead.png")
 
-let WATER_ATTACKS = [
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'🔥',id:'boton-fuego'},
-    {nombre:'🌱',id:'boton-tierra'},
-]
-let PLANT_ATTACKS = [
-    {nombre:'🌱',id:'boton-tierra'},
-    {nombre:'🌱',id:'boton-tierra'},
-    {nombre:'🌱',id:'boton-tierra'},
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'🔥',id:'boton-fuego'},
-]
-let FIRE_ATTACKS = [
-    {nombre:'🔥',id:'boton-fuego'},
-    {nombre:'🔥',id:'boton-fuego'},
-    {nombre:'🔥',id:'boton-fuego'},
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'🌱',id:'boton-tierra'},
-]
-hipodoge.ataques.push(...WATER_ATTACKS)
-capipepo.ataques.push(...PLANT_ATTACKS)
-ratigueya.ataques.push(...FIRE_ATTACKS)
-langostelvis.ataques.push(...FIRE_ATTACKS)
-pydos.ataques.push(...WATER_ATTACKS)
-tucapalma.ataques.push(...PLANT_ATTACKS)
+let hipodogeEnemigo = new Mokepon("Hipodoge" , "./assets/Hipodoge.png", 5, "./assets/hipodogeHead.png")
+let capipepoEnemigo = new Mokepon("Capipepo", "./assets/Capipepo.png", 5, "./assets/capipepoHead.png")
+let ratigueyaEnemigo = new Mokepon("Ratigueya", "./assets/Ratigueya.png", 5, "./assets/ratigueyaHead.png")
+let langostelvisEnemigo = new Mokepon("Langostelvis", "./assets/Langostelvis.png", 5, "./assets/langostelvisHead.png")
+let pydosEnemigo = new Mokepon("Pydos", "./assets/Pydos.png", 5, "./assets/pydosHead.png")
+let tucapalmaEnemigo = new Mokepon("Tucapalma", "./assets/Tucapalma.png", 5, "./assets/tucapalmaHead.png")
 
+hipodoge.ataques.push(
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🌱',id:'boton-tierra'},
+)
+capipepo.ataques.push(
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🔥',id:'boton-fuego'},
+)
+ratigueya.ataques.push(
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🌱',id:'boton-tierra'},
+)
+langostelvis.ataques.push(
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🌱',id:'boton-tierra'},
+)
+pydos.ataques.push(
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🌱',id:'boton-tierra'},
+)
+tucapalma.ataques.push(
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🔥',id:'boton-fuego'},
+)
 mokepones.push(hipodoge,capipepo,ratigueya,langostelvis,pydos,tucapalma)
 function start () {
     mokepones.forEach((Mokepon) =>{
@@ -153,7 +169,7 @@ function start () {
     joinGame()
 }
 function joinGame(){
-    fetch("http://192.168.0.104:8080/join")
+    fetch("http://localhost:8080/join")
     .then(function(res){
         if (res.ok) {
             res.text()
@@ -203,7 +219,7 @@ function f_s_playerpet() {
 }
 function selectMokepon(p_pet){
     //esta función es para mandar la selección del mokepon al backend
-    fetch(`http://192.168.0.104:8080/mokepon/${playerId}`, {
+    fetch(`http://localhost:8080/mokepon/${playerId}`, {
         method: "post",
         headers: {
             "Content-Type": "application/json"
@@ -221,64 +237,7 @@ function seleccionarmascotaenemigo(enemy){
         //let pc = random(0,mokepones.length - 1) Esto estaba cuando se seleccionaba u nenemigo random
         spane_pet.innerHTML = enemy.name
         e_mokepon = enemy.name
-        secuencia ()
     }
-}
-function secuencia(){
-    botones.forEach((boton)=>{
-        boton.addEventListener('click', (e) => {  
-            if (e.target.textContent ==='🔥') {
-                a_player.push("🔥")
-                ataquej = "🔥"
-                boton.style.background ="#112f58"
-                boton.disabled = true
-            }else if (e.target.textContent==='💧') {
-                a_player.push("💧")
-                ataquej = "💧"
-                boton.style.background ="#112f58"
-                boton.disabled = true
-            }else{
-                a_player.push("🌱")
-                ataquej = "🌱"
-                boton.style.background = "#112f58"
-                boton.disabled = true
-            } 
-            if (a_player.length === 5) {
-                console.log("Atques jugador: " + a_player)
-                sendAttacks()
-            }
-        })
-    }) 
-}
-function sendAttacks(){
-    fetch(`http://192.168.0.104:8080/mokepon/${playerId}/attacks`, {
-        method: "post",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            attacks: a_player
-        })
-    })
-    // setInterval es para que la función se ejecute cada tantos milisegundos
-    intervalo = setInterval(getAttacks, 50)
-}
-function getAttacks(){
-    fetch(`http://192.168.0.104:8080/mokepon/${enemyId}/attacks`)
-    .then(function(res){
-        if (res.ok) {
-            res.json()
-                .then(function({ attacks }) {
-                    if (attacks.length === 5) {
-                        a_enemy = attacks
-                       console.log(a_enemy)
-                        console.log("Attacks: " + attacks)                         
-                        createMessage()
-                    }
-//else {console.log("algo salio mal") ; console.log(attacks.length); console.log(attacks)}
-                })
-        }
-    })
 }
 function random(min, max){
     return Math.floor ( Math.random () * (max - min + 1 ) + min)
@@ -305,9 +264,31 @@ function show_attacks(ataques){
     b_agua = document.getElementById("boton-agua")
     b_plant = document.getElementById("boton-tierra")
     botones = document.querySelectorAll(".BAtaque")
+    secuencia ()
 }
-
-
+function secuencia(){
+    botones.forEach((boton)=>{
+        boton.addEventListener('click', (e) => {  
+            if (e.target.textContent ==='🔥') {
+                a_player.push("🔥")
+                ataquej = "🔥"
+                boton.style.background ="#112f58"
+                boton.disabled = true
+            }else if (e.target.textContent==='💧') {
+                a_player.push("💧")
+                ataquej = "💧"
+                boton.style.background ="#112f58"
+                boton.disabled = true
+            }else{
+                a_player.push("🌱")
+                ataquej = "🌱"
+                boton.style.background = "#112f58"
+                boton.disabled = true
+            } 
+            ataque_enemigo ()
+        })
+    }) 
+}
 function ataque_enemigo (){
     if (cont < 5){
         //en e_mokepon ya accedí al nombre del objeto, ahora falta llamar a los ataques de este
@@ -323,25 +304,21 @@ function ataque_enemigo (){
     }
 }
 function createMessage() {
-    clearInterval(intervalo)
-    for (let index = 0; index < a_player.length; index++){
-    if ((a_player[index] == "🔥" && a_enemy[index] == "🌱") || (a_player[index] == "🌱" && a_enemy[index] == '💧') || (a_player[index] == "💧" && a_enemy[index] == '🔥')) {
+    if ((ataquej == "🔥" && a_enemy == "🌱") || (ataquej == "🌱" && a_enemy == '💧') || (ataquej == "💧" && a_enemy == '🔥')) {
         ph_player++
         p_ph.innerHTML = ph_player
-    }else if (a_player[index] == a_enemy[index]) {}
+    }else if (ataquej == a_enemy) {}
     else {
-        console.log(a_enemy)
         ph_enemy++
         e_ph.innerHTML = ph_enemy
     }
     let new_attack = document.createElement("p")
     let new_e_attack = document.createElement("p")
-    new_attack.innerHTML = a_player[index]
-    new_e_attack.innerHTML = a_enemy[index]
+    new_attack.innerHTML = ataquej
+    new_e_attack.innerHTML = a_enemy
     attack.appendChild(new_attack)
     enemy_attack.appendChild(new_e_attack)
     cont++
-}
     if ( cont == 5 ) {
         final()
     }  
@@ -384,13 +361,24 @@ function drawingCanvas() {
 
     sendPosition(mymokepon.x, mymokepon.y)
 
-    mokeponesEnemies.forEach(function(mokepon){
-        mokepon.paintingMokepon()
-        colision(mokepon)
-    })
+    hipodogeEnemigo.paintingMokepon()
+    capipepoEnemigo.paintingMokepon()
+    ratigueyaEnemigo.paintingMokepon()
+    langostelvisEnemigo.paintingMokepon()
+    pydosEnemigo.paintingMokepon()
+    tucapalmaEnemigo.paintingMokepon()
+    if (mymokepon.speedx !== 0 || mymokepon.speedy !== 0){
+        colision(hipodogeEnemigo)
+        colision(capipepoEnemigo)
+        colision(ratigueyaEnemigo)
+        colision(langostelvisEnemigo)
+        colision(pydosEnemigo)
+        colision(tucapalmaEnemigo)
+    }
+
 }
 function sendPosition(x, y) {
-    fetch(`http://192.168.0.104:8080/mokepon/${playerId}/position`, {
+    fetch(`http://localhost:8080/mokepon/${playerId}/position`, {
         method: "post",
         headers: {
             "Content-Type": "application/json"
@@ -405,29 +393,7 @@ function sendPosition(x, y) {
         if (res.ok) {
             res.json()
                 .then(function({enemies}) {
-                    if (enemies.length === 0){console.log("todavia no hay enemigos")}
                     console.log(enemies)
-                    //map es similar a forEach con la diferencia de que retorna la misma cantidad de elementos que la lista original
-                    mokeponesEnemies = enemies.map(function (enemy) {
-                        let mokeponEnemy = null                        
-                        const mokeponName = enemy.mokepon.name || []
-                        if (mokeponName === "Hipodoge") {
-                            mokeponEnemy = new Mokepon("Hipodoge" , "./assets/Hipodoge.png", 5, "./assets/hipodogeHead.png", enemy.id)
-                        }else if (mokeponName === "Capipepo") {
-                            mokeponEnemy = new Mokepon("Capipepo", "./assets/Capipepo.png", 5, "./assets/capipepoHead.png", enemy.id)
-                        }else if (mokeponName === "Ratigueya") {
-                            mokeponEnemy = new Mokepon("Ratigueya", "./assets/Ratigueya.png", 5, "./assets/ratigueyaHead.png", enemy.id)
-                        }else if (mokeponName === "Langostelvis") {
-                            mokeponEnemy = new Mokepon("Langostelvis", "./assets/Langostelvis.png", 5, "./assets/langostelvisHead.png", enemy.id)
-                        }else if (mokeponName === "Pydos") {
-                            mokeponEnemy = new Mokepon("Pydos", "./assets/Pydos.png", 5, "./assets/pydosHead.png", enemy.id)                        
-                        }else if (mokeponName === "Tucapalma") {
-                            mokeponEnemy = new Mokepon("Tucapalma", "./assets/Tucapalma.png", 5, "./assets/tucapalmaHead.png", enemy.id)                        
-                        }
-                        mokeponEnemy.x = enemy.x
-                        mokeponEnemy.y = enemy.y     
-                        return mokeponEnemy                   
-                    })
                 })
         }
     })
@@ -448,6 +414,7 @@ function moverAbajo() {
 function stopMoving(){
     mymokepon.speedx = 0
     mymokepon.speedy = 0
+    drawingCanvas()
 }
 function tecla(event){
     switch (event.key) {
@@ -503,7 +470,6 @@ function colision(enemy){
     sectionMap.style.display = "none"
     selecciondeataque.style.display = "flex"    
     console.log("Colisión con " + enemy.name)
-    enemyId = enemy.id
    seleccionarmascotaenemigo(enemy)
 }
 window.addEventListener ("load", start)
