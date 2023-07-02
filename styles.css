@@ -18,6 +18,7 @@ body{
 .subtitle{
     font-size: 52px
 }
+/* Estilos para los contenedores de las mascotas */
 .boxes{
     display: flex;
     align-items: center;
@@ -25,6 +26,8 @@ body{
 .boxes img{
     height: 200px;
 }
+/* Estilos para las tarjetas y botones de los ataques*/
+
 .tarjetas,.a_button{
     background-color: #59C1BD;
     color: white;
@@ -42,7 +45,8 @@ body{
     align-items: center;
     cursor: pointer;
 }
-input{
+/* Estilos para que los checkboxes no se vean */
+input,.map{
     display: none;
 }
 input:checked + label{
@@ -95,6 +99,9 @@ p{
     grid-template-columns: 200px 200px;
     justify-items: center;
 }
+
+/* Estilos responsivos para pantallas pequeñas */
+
 @media (max-width: 1350px){
     .boxes,.xd{
         display: flex;

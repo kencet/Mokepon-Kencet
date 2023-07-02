@@ -9,58 +9,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+    <!-- Sección de selección de mascota -->
     <section id="mascota">
-        <h1 class= "tittle" >Mokepon! 🔥💧🍃</h1>
+        <h1 class="tittle">Mokepon! 🔥💧🍃</h1>
         <h2 class="subtitle">Elige tu mascota:</h2>
 
-        <div id="contenedorDeMokepones"class="boxes">
-            
+        <div id="contenedorDeMokepones" class="boxes">
+            <!-- Los mokepones se agregarán dinámicamente aquí -->
         </div>
 
         <button class="button" id="b_mascota">Seleccionar</button>
     </section>
 
+    <!-- Sección del mapa -->
     <section id="watchMap">
-        <h2 class= "tittle" >Recorre el mapa!</h3>
+        <h2 class="tittle">Recorre el mapa!</h3>
         <canvas id="map"></canvas>
-        <button class="map" ontouchend="stopMoving()"  onmouseup="stopMoving()"  ontouchstart="moverArriba()" onmousedown="moverArriba()">Arriba</button>
-        <div id="media"> 
-            <button class="map" ontouchend="stopMoving()" onmouseup="stopMoving()" ontouchstart="moverIzquierda()" onmousedown="moverIzquierda()">Izquierda</button>            
+        <!-- Botones para moverse en el mapa -->
+        <button class="map" ontouchend="stopMoving()" onmouseup="stopMoving()" ontouchstart="moverArriba()" onmousedown="moverArriba()">Arriba</button>
+        <div id="media">
+            <button class="map" ontouchend="stopMoving()" onmouseup="stopMoving()" ontouchstart="moverIzquierda()" onmousedown="moverIzquierda()">Izquierda</button>
             <button class="map" ontouchend="stopMoving()" onmouseup="stopMoving()" ontouchstart="moverDerecha()" onmousedown="moverDerecha()">Derecha</button>
          </div>   
-            <button class="map" ontouchend="stopMoving()" onmouseup="stopMoving()" ontouchstart="moverAbajo()" onmousedown="moverAbajo()">Abajo</button>
-        
+         <button class="map" ontouchend="stopMoving()" onmouseup="stopMoving()" ontouchstart="moverAbajo()" onmousedown="moverAbajo()">Abajo</button>
     </section>
 
+    <!-- Sección de selección de ataque -->
     <section id="ataque">
-        <h1 class= "tittle" >Mokepon! 🔥💧🍃</h1>
+        <h1 class="tittle">Mokepon! 🔥💧🍃</h1>
         <h2 class="subtitle">Elige tu ataque:</h2>
-        <div id = "contenedorDeAtaques" class="xd"> 
-
-        </div>  
-            <section>
-                <p><span  id="final_result">Combate ☠ </span></p>
-            </section>
+        <div id="contenedorDeAtaques" class="xd">
+            <!-- Los ataques se agregarán dinámicamente aquí -->
+        </div>
+        <section>
+            <p><span id="final_result">Combate ☠</span></p>
+        </section>
         <div>
+            <section id="mensajes"></section>
 
-           <section id="mensajes"></section>
-            
-            
             <div id="fight">
-
+                <!-- Mostrar el nombre y la salud de la mascota del jugador -->
                 <div id="attack">
-                        <p id="p_pet"></p><p id="ph_player">0</p> 
+                    <p id="p_pet"></p><p id="ph_player">0</p> 
                 </div>
+                <!-- Mostrar el nombre y la salud de la mascota enemiga -->
                 <div id="enemy_attack">
-                        <p id="e_pet"></p><p id="ph_enemy">0</p> 
+                    <p id="e_pet"></p><p id="ph_enemy">0</p> 
                 </div>  
-
             </div>
             <section class="button" id="reiniciar"> 
                 <button id="reinicio">Reiniciar</button>
             </section>
         </div>
     </section>
+    <!-- Archivo JavaScript para manejar la lógica del juego -->
     <script src="./js/mokepon.js"></script>
 </body>
 </html>
